@@ -16,10 +16,8 @@ def format_time(t):
     return f'{t.hour:02d}:{t.minute:02d}:{t.second:02d}'
 
 def sum_times(t1, t2):
-    """Add two time objects and return the sum, ensuring proper carry over of minutes and seconds."""
-    sum = Time(0, 0, 0)
-    
-    # Add hours, minutes, and seconds separately
+    """Add two time objects and return the sum, ensuring proper carry over of minutes and hours"""
+    sum = Time(0, 0, 0)  # Add hours, minutes, and seconds separately
     sum.hour = t1.hour + t2.hour
     sum.minute = t1.minute + t2.minute
     sum.second = t1.second + t2.second
@@ -35,6 +33,33 @@ def sum_times(t1, t2):
         sum.hour += 1     # Add 1 hour
     
     return sum  # Return the resulting Time object
+
+def change_time(time, seconds):
+    """Change the time object by adding/subtracting seconds, adjusting the minutes and hours as needed"""
+    time.second += seconds
+    
+    # If seconds are negative or too large, adjust minutes and hours accordingly
+    while time.second >= 60:
+        time.second -= 60  # Subtract 60 seconds
+        time.minute += 1   # Add 1 minute
+    
+    while time.second < 0:
+        time.second += 60  # Add 60 seconds
+        time.minute -= 1   # Subtract 1 minute
+    
+    while time.minute >= 60:
+        time.minute -= 60  # Subtract 60 minutes
+        time.hour += 1     # Add 1 hour
+    
+    while time.minute < 0:
+        time.minute += 60  # Add 60 minutes
+        time.hour -= 1     # Subtract 1 hour
+    
+    # Ensure that hour is within 0 to 23 (24-hour format)
+    if time.hour >= 24:
+        time.hour %= 24  # Wrap around to 0 if hour is greater than or equal to 24
+    
+    return None
 
 def valid_time(t):
     """Check for the validity of the time object attributes:
